@@ -62,6 +62,10 @@ for(i in seq_along(zip_url)){
 
 # here...
 
+# create an overview of available html files as dt_file_info
+# structure: date, part_number, unit, page_number
+# maybe do into the docs briefly and say what each doc is about, e.g. using the headers?
+
 
 
 
