@@ -5,7 +5,6 @@
 lib <- c("rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", "lubridate") 
 lapply(lib, require, character.only = T) 
 
-
 ## STEP 2: create dataframe -----------------------------------
 
 # create vector that contains different directories of scraping output
@@ -39,9 +38,9 @@ for(i in seq_along(directories)){
 # rename columnes
 mydata <- rename(mydata, empty = V1, vol_no_date = V2, unit = V3, pages = V4, link = V5, text = V6)
 
-# summarize mydata along congress unit and data
+# summarize mydata along congress unit and date
 mydata_sum <- ddply(mydata, .(vol_no_date, unit), summarize,
-                    pages = paste(unique(pages), collapse = ", "),
+                    pages = paste(unique(pages), collapse = "-"),
                     text = paste(text, collapse = " "))
 
 
@@ -50,14 +49,14 @@ mydata_sum <- ddply(mydata, .(vol_no_date, unit), summarize,
 ## helperfunctions
 # date: extract date in format YYYY-MM-DD
 clean_date <- function(vol_no_date){
-  # First save your current locale
+  # first save your current locale
   loc <- Sys.getlocale("LC_TIME")
-  # Set correct locale for the strings to be parsed
+  # set correct locale for the strings to be parsed
   Sys.setlocale("LC_TIME", "C") 
-  # Exctact and save as dates
+  # Exctract and save as dates
   dates <- str_extract(string = vol_no_date ,pattern = "(?<=\\().*(?=\\))") %>%
     as.Date(format = "%A, %B %d, %Y")
-  # Then set back to your old locale
+  # then set back to your old locale
   Sys.setlocale("LC_TIME", loc)
   # Credit: https://stackoverflow.com/questions/13726894/strptime-as-posixct-and-as-date-return-unexpected-na
   return(dates)
@@ -86,7 +85,7 @@ clean_unit <- function(unit){
   unit <- as.factor(unit)
 }
 
-# page number: remove [], page, pages from page
+# page number: remove "page", "pages", [] and combine them to (min-page)-(max-page)
 clean_pages <- function(page){
   # remove "Pages"
   page <- str_remove_all(page, pattern = "Pages ")
@@ -94,7 +93,44 @@ clean_pages <- function(page){
   page <- str_remove_all(page, pattern = "Page ")
   # remove []
   page <- str_remove_all(page, pattern = "\\[|\\]")
-  page <- as.factor(page) 
+  
+  # create [min]-[max] pages
+  # introduce helpvectors
+  unique_letter <- NA
+  min_num <- NA
+  max_num <- NA
+  #extracting
+  letter <- str_extract_all(page, "[A-Z]{1}")
+  number <- str_extract_all(page, "\\d+")
+  # loop to get unique letter and save them in helpvector
+  for (i in seq_along(letter)){
+    unique_letter[i] <- letter[[i]][1]
+  }
+  # loop to get min-page and max-page save them in helpvector
+  for (i in seq_along(number)){
+    min_num[i] <- min(number[[i]])
+    max_num[i] <- max(number[[i]])
+  }
+  # helperfunction to join letter, min, max
+  join_pages <- function (letter,min,max){
+    if(min==max){
+      output <- paste0(letter,min)
+    } 
+    else {
+      output <- paste0(letter,min, "-", letter, max)  
+    }
+    return(output)
+  }
+  # loop to get min-page and max-page with the helperfunction join_pages
+  for(i in seq_along(unique_letter)){
+    page[i] <- join_pages(unique_letter[i], min_num[i], max_num[i])
+  }
+  # delete helpvectors
+  rm(unique_letter)
+  rm(min_num)
+  rm(max_num)
+  # return output
+  return(page)
 }
 
 # text: clean text
@@ -108,7 +144,7 @@ congress_stopword <- c("absent", "adjourn", "ask", "can", "chairman", "committee
                        "there under", "there unto", "there upon", "there with",
                        "today", "where about", "where after", "whereas", "where at", "whereby", "where fore", "where from", "where in",
                        "where into", "where of", "where on", "where to", "where under",
-                       "where upon", "wherever", "where with", "where withal", "will", "yea", "yes", "yield")
+                       "where upon", "wherever", "where with", "will", "yea", "yes", "yield")
 #credits: Matthew Gentzkow,Jesse M. Shapiro, Matt Taddy (11/02/2019)
 
 clean_text <- function(string){
@@ -125,6 +161,7 @@ clean_text <- function(string){
   # remove stopwords from package and from hand-collected list
   string <- removeWords(string, stopwords("english"))
   string <- removeWords(string, congress_stopword)
+  string <- as.character(string)
 }
 
 # clean_all: combine all helperfunction in one function 
@@ -135,60 +172,19 @@ clean_all <- function(vol_no_date, unit, pages, text){
   unit <- clean_unit(unit)
   pages <- clean_pages(pages)
   text <- clean_text(text)
-  clean_data <- data.frame(vol, no, date, unit, pages, text)
+  clean_data <- data.frame(vol, no, date, unit, pages, text, stringsAsFactors = FALSE)
   return(clean_data)
 }
 
-# apply helpferfunction to clean dataset
+## apply helpferfunction to clean dataset
 mydata_clean <- clean_all(mydata_sum$vol_no_date, 
                           mydata_sum$unit, 
                           mydata_sum$pages, 
                           mydata_sum$text)
 
-#save as tipple
-df <- as_tibble(mydata_clean)
-
+write.csv(mydata_clean, "C:/Users/Simone/Desktop/UScongress_record_clean.csv") 
 
 ## ADD ON: remaining things to do ----------------------------
-# pages:
-#   - combine first and last page
-
-## STEP 4: analysis ------------------------------------------
-library("tidytext")
-library("dplyr")
-library("ggplot2")
-library("SnowballC")
-
-df %>%
-  unnest_tokens(output = "word",
-                token = "words", 
-                input = text) %>%
-  mutate(word = wordStem(word))
-
-# function count words
-words <- df %>%
-  unnest_tokens(output = "word",
-                token = "words", 
-                input = text) %>%
-  #anti_join(stop_words)%>%
-  count(V2, V3, word, sort = TRUE)
-
-# function count a specific word
-words %>%
-  filter(word=="president")%>%
-  arrange(desc(n))
-
-# funciton count states
-us_states <- c("alabama", "alaska", "arizona", "arkansas", "california", "colorado", "connecticut", "delaware", "florida", "georgia",
-               "hawaii", "idaho", "illinois", "indiana", "iowa", "kansas", "kentucky", "louisina", "maine", "maryland", "messachusetts",
-               "michigan", "minnesota", "mississippi", "missouri", "montana", "nebraska", "nevada", "new hampshire", "new jersey", "new mexico",
-               "new york", "north carlolina", "north dakota", "ohio", "oklahoma", "oregon", "pennsylvania", "rhode island", "south carolina", 
-               "south dakota", "tennessee", "texas", "utah", "vermont", "virginia", "washington", "west virginia", "wisconsin", "wyoming")
-
-count_states <- words %>%
-  filter(word %in% us_states) %>%
-  arrange(desc(V3))
-
-# function count political topics or department or agency names
-
-# sentiment analysis
+# - error handeling --> function should tell what they do! 
+# - directories: Assumption that wd is [~/output/.../html] --> is this always the case?
+# - scrape_csrc.R --> possible that the output will be saved always in [~/output]?
