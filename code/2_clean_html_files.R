@@ -178,7 +178,6 @@ clean_all <- function(vol_no_date, unit, pages, text){
   date <- clean_date(vol_no_date)
   unit <- clean_unit(unit)
   pages <- clean_pages(pages)
-  pages <- gsub("[^0-9-]", "", pages)
   text <- clean_text(text)
   clean_data <- data.frame(vol, no, date, unit, pages, text, stringsAsFactors = FALSE)
   return(clean_data)
@@ -190,8 +189,10 @@ my_data <- clean_all(my_data$vol_no_date,
                      my_data$pages, 
                      my_data$text)
 
-my_data <- separate(my_data, pages, into = c("start_page", "end_page"),
-                    sep = "-", remove = F, convert = T, extra = "warn", fill = "warn")
+my_data <- my_data %>%
+  mutate(pg = gsub("[^0-9-]", "", pages)) %>%
+  separate(., pg, into = c("start_page", "end_page"),
+                    sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
 
 
 
