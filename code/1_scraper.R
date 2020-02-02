@@ -73,9 +73,3 @@ for(i in seq_along(zip_url)){
 
 
 
-# unzip and read html files
-rec_dat <- temp %>% unz(., paste0("crec_from", start_date, "_to_", end_date))
-
-# use string split between start_of_doc and end_of_doc
-start_of_doc <- "<body><pre>"
-end_of_doc <- "</pre></body>"

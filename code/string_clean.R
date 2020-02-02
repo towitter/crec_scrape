@@ -8,7 +8,7 @@ lapply(lib, require, character.only = T)
 ## STEP 2: create dataframe -----------------------------------
 
 # create vector that contains different directories of scraping output
-directories <- paste0("~/output/", dir("~/output"),"/html")
+directories <- paste0("output/", dir("output"),"/html")
 
 # create dataframe for html files
 mydata <- NULL
@@ -23,10 +23,10 @@ get_text_from_html <- function(html){
 
 # save all html files in mydata
 for(i in seq_along(directories)){
-  # set working directory
-  setwd(directories[i])
+  
   # get file names from working directory
-  files <- dir() 
+  files <- list.files(directories[i], pattern = "*.htm")
+  
   # apply get_text function and save output in mydata
   for(row in seq_along(files)){
     mydata_row <- get_text_from_html(files[row])
@@ -146,6 +146,7 @@ congress_stopword <- c("absent", "adjourn", "ask", "can", "chairman", "committee
                        "where into", "where of", "where on", "where to", "where under",
                        "where upon", "wherever", "where with", "will", "yea", "yes", "yield")
 #credits: Matthew Gentzkow,Jesse M. Shapiro, Matt Taddy (11/02/2019)
+# http://web.stanford.edu/~gentzkow/research/politext.pdf
 
 clean_text <- function(string){
   # remove \r
@@ -185,6 +186,10 @@ mydata_clean <- clean_all(mydata_sum$vol_no_date,
 write.csv(mydata_clean, "C:/Users/Simone/Desktop/UScongress_record_clean.csv") 
 
 ## ADD ON: remaining things to do ----------------------------
-# - error handeling --> function should tell what they do! 
+# - error handeling --> function should tell what they do!
+
 # - directories: Assumption that wd is [~/output/.../html] --> is this always the case?
+## tw: I corrected that using list.files
+
 # - scrape_csrc.R --> possible that the output will be saved always in [~/output]?
+## tw: yes programmed that way
