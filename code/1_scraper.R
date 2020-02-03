@@ -10,8 +10,8 @@ lapply(lib, require, character.only = T)
 '%ni%' <- Negate('%in%')
 
 # dates we want to download the records for
-start_date <- ymd("2013-01-26")
-end_date <- ymd("2013-01-31")
+#start_date <- ymd("2013-01-26")
+#end_date <- ymd("2013-01-31")
 
 # base url for zipped files
 base_url <- "https://www.govinfo.gov/content/pkg/CREC-"
