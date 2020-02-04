@@ -1,12 +1,6 @@
 # SPOSM
 # simone euler, tobias witter
 
-# packages
-lib <- c("tidyverse", "lubridate", "data.table") 
-
-#lapply(lib, install.packages)
-lapply(lib, require, character.only = T)
-
 '%ni%' <- Negate('%in%')
 
 # dates we want to download the records for

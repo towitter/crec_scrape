@@ -21,14 +21,14 @@ my_data <- my_data %>% mutate(
   nchar = nchar(text),
   page_length = abs(end_page - start_page))
 
-# visualizations
-idx <- c(1, diff(my_data$date))
-i2 <- c(1, which(idx != 1), nrow(df)+1)
-my_data$grp <- rep(1:length(diff(i2)), diff(i2))
+my_data <- my_data %>%
+  mutate(nchar = ifelse(is.na(nchar), 0, nchar),
+         page_length = ifelse(is.na(page_length), 0, page_length))
 
+# visualizations
 my_data %>%
-  ggplot(aes(date, page_length, group=unit, color=unit)) +
-  geom_point()
+  ggplot(aes(date, nchar, group=unit, color=unit)) +
+  geom_line()
 
 # function count political topics or department or agency names
 

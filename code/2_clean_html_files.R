@@ -7,7 +7,7 @@ lapply(lib, require, character.only = T)
 
 ## STEP 2: create dataframe -----------------------------------
 
-setwd("C:/Users/Nutzer/Documents/R/crec_scrape")
+#setwd("C:/Users/Nutzer/Documents/R/crec_scrape")
 
 # create vector that contains different directories of scraping output
 directories <- paste0("output/", dir("output"),"/html")
@@ -39,10 +39,9 @@ my_data <- bind_rows(my_data)
 
 # rename columnes
 my_data <- my_data %>%
-  rename(vol_no_date = V2, unit = V3,
+  select(-V1, vol_no_date = V2, unit = V3,
          pages = V4, link = V5, text = V6) %>%
-  distinct(vol_no_date, unit, pages, text, .keep_all = TRUE) %>%
-  select(-V1)
+  distinct(vol_no_date, unit, pages, text, .keep_all = TRUE)
 
 # summarize my_data along congress unit and date
 my_data <- ddply(my_data, .(vol_no_date, unit), summarize,
