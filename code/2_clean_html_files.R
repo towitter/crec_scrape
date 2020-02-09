@@ -168,9 +168,9 @@ clean_text <- function(string){
   string <- removeWords(string, stopwords("english"))
   string <- removeWords(string, congress_stopword)
   # remove single characters from text 
-  for(i in seq_along(mydata_clean$text)){
-    mydata_clean$text[i] <- paste(Filter(function(x) nchar(x) > 1,
-                                         unlist(strsplit(as.character(mydata_clean$text[i]), " "))), collapse = " ")
+  for(i in seq_along(my_data$text)){
+    my_data$text[i] <- paste(Filter(function(x) nchar(x) > 1,
+                                         unlist(strsplit(as.character(my_data$text[i]), " "))), collapse = " ")
   }
   string <- as.character(string)
 }
