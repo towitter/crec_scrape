@@ -29,11 +29,11 @@ trr266_lightred <- lighten(trr266_red, 0.5)
 trr_palette <- c(trr266_red, trr266_blue, trr266_yellow, trr266_petrol, trr266_lightpetrol)
 
 # transform dataframe to words
-words <- as_tibble(mydata_clean) %>%
+words <- as_tibble(my_data) %>%
   unnest_tokens(output = "word",
                 token = "words", 
                 input = text) %>%
-  count(date, unit, word, sort = TRUE)
+  dplyr::count(date, unit, word, sort = TRUE)
 
 
 ## STEP 2: analysis ------------------------------------------
@@ -49,7 +49,7 @@ get_top_10_words <- function(startdate, enddate, congressunit){
     words %>% 
       filter(date >= startdate & date <= enddate , unit == congressunit)%>%
       group_by(unit, word) %>% 
-      summarize(n = sum(n)) %>% 
+      dplyr::summarise(n = sum(n)) %>% 
       arrange(desc(n))%>% 
       slice(1:10) %>%
       mutate(word = reorder(word, n)) %>%
@@ -83,7 +83,7 @@ get_wordcloud <- function(startdate, enddate, congressunit){
   cloud <- words %>%
     filter(date >= startdate & date <= enddate , unit == congressunit)%>%
     group_by(word) %>%
-    summarize(n = sum(n)) %>%
+    dplyr::summarise(n = sum(n)) %>%
     arrange(desc(n))
   # create wordcloud
   set.seed(1234)
@@ -104,7 +104,7 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
   over_time <- words %>%
     filter(date >= startdate & date <= enddate , unit == congressunit,  word %in% c(keywords)) %>%
     group_by(date, unit, word) %>% 
-    summarize(n = sum(n)) %>% 
+    dplyr::summarise(n = sum(n)) %>% 
     arrange(desc(date))
   return(
     ggplot(over_time, aes(x = date, y = n, color = word)) + 
@@ -128,9 +128,3 @@ keyword_over_time(startdate = "2013-01-28",
                   congressunit = "Senate",
                   keywords = c("president", "member", "tax"))
 
-
-## ADD ON: clean text from single character -------------------------------------
-string <- c("das jdsa j aj j a jaj s", "das a a a ajido")
-paste(Filter(function(x) nchar(x) > 1,
-             unlist(strsplit(string, " "))), 
-      collapse=" ")
