@@ -7,8 +7,6 @@ lapply(lib, require, character.only = T)
 
 ## STEP 2: create dataframe -----------------------------------
 
-#setwd("C:/Users/Nutzer/Documents/R/crec_scrape")
-
 # create vector that contains different directories of scraping output
 directories <- paste0("output/", dir("output"),"/html")
 
@@ -63,7 +61,7 @@ clean_date <- function(vol_no_date){
     as.Date(format = "%A, %B %d, %Y")
   # then set back to your old locale
   Sys.setlocale("LC_TIME", loc)
-  # Credit: https://stackoverflow.com/questions/13726894/strptime-as-posixct-and-as-date-return-unexpected-na
+  # credit: https://stackoverflow.com/questions/13726894/strptime-as-posixct-and-as-date-return-unexpected-na
   return(dates)
 }
 
@@ -198,15 +196,4 @@ my_data <- my_data %>%
   separate(., pg, into = c("start_page", "end_page"),
                     sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
 
-
-
-#write.csv(my_data_clean, "C:/Users/Simone/Desktop/UScongress_record_clean.csv") 
-
-## ADD ON: remaining things to do ----------------------------
-# - error handeling --> function should tell what they do!
-
-# - directories: Assumption that wd is [~/output/.../html] --> is this always the case?
-## tw: I corrected that using list.files
-
-# - scrape_csrc.R --> possible that the output will be saved always in [~/output]?
-## tw: yes programmed that way
+### END OF CODE ###
