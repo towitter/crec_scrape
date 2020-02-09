@@ -150,7 +150,7 @@ congress_stopword <- c("absent", "adjourn", "ask", "can", "chairman", "committee
                        "today", "where about", "where after", "whereas", "where at", "whereby", "where fore", "where from", "where in",
                        "where into", "where of", "where on", "where to", "where under",
                        "where upon", "wherever", "where with", "will", "yea", "yes", "yield")
-#credits: Matthew Gentzkow,Jesse M. Shapiro, Matt Taddy (11/02/2019)
+# credits: Matthew Gentzkow,Jesse M. Shapiro, Matt Taddy (11/02/2019)
 # http://web.stanford.edu/~gentzkow/research/politext.pdf
 
 clean_text <- function(string){
@@ -167,6 +167,11 @@ clean_text <- function(string){
   # remove stopwords from package and from hand-collected list
   string <- removeWords(string, stopwords("english"))
   string <- removeWords(string, congress_stopword)
+  # remove single characters from text 
+  for(i in seq_along(mydata_clean$text)){
+    mydata_clean$text[i] <- paste(Filter(function(x) nchar(x) > 1,
+                                         unlist(strsplit(as.character(mydata_clean$text[i]), " "))), collapse = " ")
+  }
   string <- as.character(string)
 }
 
