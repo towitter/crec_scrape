@@ -48,7 +48,6 @@ my_data <- ddply(my_data, .(vol_no_date, unit), summarize,
 
 
 ## STEP 3: cleaning dataframe ------------------------------
-
 ## helperfunctions
 # date: extract date in format YYYY-MM-DD
 clean_date <- function(vol_no_date){
@@ -132,6 +131,14 @@ clean_pages <- function(page){
   rm(unique_letter)
   rm(min_num)
   rm(max_num)
+
+  
+  # add start_page and end_page columns
+  page <- as.data.frame(page) %>%
+    mutate(pg = gsub("[^0-9-]", "", page)) %>%
+    separate(., pg, into = c("start_page", "end_page"),
+             sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
+  
   # return output
   return(page)
 }
@@ -166,9 +173,9 @@ clean_text <- function(string){
   string <- removeWords(string, stopwords("english"))
   string <- removeWords(string, congress_stopword)
   # remove single characters from text 
-  for(i in seq_along(my_data$text)){
-    my_data$text[i] <- paste(Filter(function(x) nchar(x) > 1,
-                                         unlist(strsplit(as.character(my_data$text[i]), " "))), collapse = " ")
+  for(i in seq_along(string)){
+    string[i] <- paste(Filter(function(x) nchar(x) > 1,
+                                         unlist(strsplit(as.character(string[i]), " "))), collapse = " ")
   }
   string <- as.character(string)
 }
@@ -185,15 +192,10 @@ clean_all <- function(vol_no_date, unit, pages, text){
   return(clean_data)
 }
 
-## apply helpferfunction to clean dataset
+## apply helperfunction to clean dataset
 my_data <- clean_all(my_data$vol_no_date, 
                      my_data$unit, 
                      my_data$pages, 
                      my_data$text)
-
-my_data <- my_data %>%
-  mutate(pg = gsub("[^0-9-]", "", pages)) %>%
-  separate(., pg, into = c("start_page", "end_page"),
-                    sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
 
 ### END OF CODE ###

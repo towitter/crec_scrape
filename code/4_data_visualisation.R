@@ -16,15 +16,9 @@ lighten <- function(color, factor = 0.5) {
 
 trr266_petrol <- rgb(27, 138, 143, 255, maxColorValue = 255)
 trr266_lightpetrol <- lighten(trr266_petrol, 0.5)
-
 trr266_blue <- rgb(110, 202, 226, 255, maxColorValue = 255)
-trr266_lightblue <- lighten(trr266_blue, 0.5)
-
 trr266_yellow <- rgb(255, 180, 59, 255, maxColorValue = 255)
-trr266_lightyellow <- lighten(trr266_yellow, 0.5)
-
 trr266_red <- rgb(148, 70, 100, 255, maxColorValue = 255)
-trr266_lightred <- lighten(trr266_red, 0.5)
 
 trr_palette <- c(trr266_red, trr266_blue, trr266_yellow, trr266_petrol, trr266_lightpetrol)
 
@@ -71,11 +65,12 @@ get_top_10_words <- function(startdate, enddate, congressunit){
   )
 }
 
+
 # apply function
-get_top_10_words(startdate = "2013-01-28", enddate =  "2013-01-31", congressunit = "Senate")
+get_top_10_words(startdate = "2012-07-01", enddate =  "2012-12-30", congressunit = "Senate")
 get_top_10_words("2013-01-28", "2013-01-31", "House")
-get_top_10_words("2013-01-28", "2013-01-31", "Daily Digest")
-get_top_10_words("2013-01-28", "2013-01-31", "Extensions of Remarks")
+get_top_10_words("2012-07-01", "2013-01-31", "Daily Digest")
+get_top_10_words("2012-07-01", "2013-01-31", "Extensions of Remarks")
 
 # FUNCTION: CREATE WORDCLOUD 
 get_wordcloud <- function(startdate, enddate, congressunit){
@@ -88,15 +83,14 @@ get_wordcloud <- function(startdate, enddate, congressunit){
   # create wordcloud
   set.seed(1234)
   return(wordcloud(words = cloud$word, 
-                   freq = cloud$n, 
-                   #min.freq = minfreq$n, 
+                   freq = cloud$n,
                    max.words = 100, 
                    random.order=FALSE, rot.per=0.35, 
                    colors=trr_palette))
 }
 
 #apply function
-get_wordcloud(startdate = "2013-01-29", enddate =  "2013-01-31", congressunit = "Senate")
+get_wordcloud(startdate = "2012-08-29", enddate =  "2013-04-30", congressunit = "Senate")
 get_wordcloud(startdate = "2013-01-28", enddate =  "2013-01-29", congressunit = "House")
 
 # FUNCTION: KEYWORD SEARCH OVER TIME
@@ -108,7 +102,6 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
     arrange(desc(date))
   return(
     ggplot(over_time, aes(x = date, y = n, color = word)) + 
-      geom_point() +
       geom_line() +
       scale_color_manual(values = trr_palette, name = "Keywords")+
       theme_classic()+
@@ -123,8 +116,8 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
 }
 
 #apply function
-keyword_over_time(startdate = "2013-01-28", 
-                  enddate = "2013-01-31",
+keyword_over_time(startdate = "2012-07-01", 
+                  enddate = "2013-06-30",
                   congressunit = "Senate",
-                  keywords = c("president", "member", "tax"))
+                  keywords = c("gun", "violence", "security"))
 
