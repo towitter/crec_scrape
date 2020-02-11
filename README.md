@@ -25,5 +25,5 @@ The file `4_data_visualization.R` from the code-directory contains certain attem
 * by creating wordclouds of a certain unit in a certain period
 * by plotting the frequency of selected keywords over time of a certain unit 
 
-## Contribution
+## Contributing
 Based on the data output we want to encourage the community to build analysis on congressional debates, to visualize their findings and to share them with us. Pull request are welcomed. Please read CONTRIBUTING.md for details on our code of conduct.
