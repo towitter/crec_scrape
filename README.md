@@ -25,12 +25,12 @@ Here, you need to set up the working environment by installing required packages
   <tr>
     <td>vol</td>
     <td>Num</td>
-    <td>Every year, a new volume of the Congressional Records is started </td>
+    <td>A new volume of the Congressional Records is started every year (e.g. Volumne 140 for 1994)</td>
   </tr>
   <tr>
     <td>no</td>
     <td>Num</td>
-    <td>Each day, a new issue of the Congressional Records is printed</td>
+    <td>A new issue of the Congressional Records is printed every day </td>
   </tr>
   <tr>
     <td>date</td>
@@ -40,12 +40,12 @@ Here, you need to set up the working environment by installing required packages
   <tr>
     <td>unit</td>
     <td>Factor</td>
-    <td>The Congressional Records consist out of four sections: House, Senate, Daily Digest, and Extensions of Remark. While House and Senate contains all text spoken of the two chambers of the congress, Daily Digest serves as a table of content for the congress actions, and extension of remarks contains tributes, statements, and other information that are not directly spoken during open proceedings</td>
+    <td>The Congressional Records consist out of four sections: House, Senate, Daily Digest, and Extensions of Remark. While House and Senate include all words spoken on the floor of the congress, Daily Digest serves as a table of content for the congress actions, and Extension of Remarks contains tributes, statements, and other information that are not directly spoken during open proceedings</td>
   </tr>
   <tr>
     <td>pages</td>
     <td>Factor</td>
-    <td>Pages are numbered sequentially throughout the session of congress. The pageprefix operator helps to specify units by H, S, D and E.</td>
+    <td>Pages are numbered sequentially throughout the session of congress. The pageprefix operator helps to specify units by H, S, D and E</td>
   </tr>
   <tr>
     <td>start_page</td>
@@ -60,7 +60,7 @@ Here, you need to set up the working environment by installing required packages
   <tr>
     <td>text</td>
     <td>Chr</td>
-    <td>Shows the text of the congressional record associated with vol, no, date, and unit</td>
+    <td>Contains the processed text </td>
   </tr>
 </table> 
 
