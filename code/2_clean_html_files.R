@@ -1,4 +1,4 @@
-##SPOSM
+# SPOSM - clean html files
 # simone euler, tobias witter
 
 ## STEP 1: working enviornment setup --------------------------
@@ -131,14 +131,6 @@ clean_pages <- function(page){
   rm(unique_letter)
   rm(min_num)
   rm(max_num)
-
-  
-  # add start_page and end_page columns
-  page <- as.data.frame(page) %>%
-    mutate(pg = gsub("[^0-9-]", "", page)) %>%
-    separate(., pg, into = c("start_page", "end_page"),
-             sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
-  
   # return output
   return(page)
 }
@@ -192,10 +184,17 @@ clean_all <- function(vol_no_date, unit, pages, text){
   return(clean_data)
 }
 
-## apply helperfunction to clean dataset
+# apply helperfunction to clean dataset
 my_data <- clean_all(my_data$vol_no_date, 
                      my_data$unit, 
                      my_data$pages, 
                      my_data$text)
+
+
+# add start_page and end_page columns
+my_data <- my_data %>%
+  mutate(pg = gsub("[^0-9-]", "", pages)) %>%
+  separate(., pg, into = c("start_page", "end_page"),
+           sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
 
 ### END OF CODE ###

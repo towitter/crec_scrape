@@ -119,5 +119,5 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
 keyword_over_time(startdate = "2012-07-01", 
                   enddate = "2013-06-30",
                   congressunit = "Senate",
-                  keywords = c("gun", "violence", "security"))
+                  keywords = c("defense", "foreign", "immigration"))
 

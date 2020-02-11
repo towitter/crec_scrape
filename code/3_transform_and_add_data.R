@@ -28,7 +28,9 @@ my_data <- my_data %>%
 # visualizations
 my_data %>%
   ggplot(aes(date, nchar, group=unit, color=unit)) +
-  geom_line()
+  geom_line() +
+  scale_color_manual(values = trr_palette, name = "Congress unit")+
+  theme_classic()
 
 # function count political topics or department or agency names
 

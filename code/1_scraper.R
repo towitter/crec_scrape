@@ -1,4 +1,4 @@
-# SPOSM
+# SPOSM - scraper
 # simone euler, tobias witter
 
 '%ni%' <- Negate('%in%')
