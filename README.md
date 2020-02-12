@@ -12,9 +12,22 @@ The respository is the result of a group project within the [SPOSM](https://gith
 ## Basic Usage
 This project is tested using R 3.6.2. and RStudio version 1.2.1335.
 
-The general form to start the scraping and tidying process of U.S. Congressional Records is to [clone the respository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) and to open the file `master-sourcing-the-rest.R` from the code-directory. 
+The general form to start the **scraping**, **tidying**, and **visualization** process of U.S. Congressional Records is to [clone the respository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) and to open the file `master-sourcing-the-rest.R` from the code-directory. Here, you need to set up first the working environment by installing required packages. The second step requires you to enter the `start_date` and `end_date` of the time period you want to download the Congressional Records for. 
 
-Here, you need to set up first the working environment by installing required packages. The second step requires you to enter the `start_date` and `end_date` of the time period you want to download the Congressional Records for. The third step includes the actual scraping process by sourcing `1_scraper.R`. Thereby, the desired Congressional Records are downloaded as html-files and are stored in the directory output locally on your computer. From there, the tidying process can start. By sourcing `2_clean_html_files.R` the script parses the text from each html-file and produces a dataset called `my_data`. The dataset `my_data` is structured as follows: `vol`, `no`, and `date` identify the daily edition of the Congressional Records. `unit` identifies the four main sections of each edition, namely House, Senate, Daily Digest, and Extensions of Remarks. `pages`, `start_page`, `end_page` identifies associated page numbers for each unit in the edition and `text` contains the associated text. As the daily records are issued only when the congress is in session, a merging command introduce NA’s for dates when congress in not in session (e.g. weekends).
+#### Scraping Process
+By sourcing `1_scraper.R` the actual scraping process will be started in the third step. Thereby, the desired Congressional Records are downloaded as html-files and are stored in the directory output locally on your computer. 
+
+#### Tidying Process
+From there, the tidying process can start. By sourcing `2_clean_html_files.R` the script parses the text from each html-file and produces a dataset called `my_data`. The dataset `my_data` is structured as follows: `vol`, `no`, and `date` identify the daily edition of the Congressional Records. `unit` identifies the four main sections of each edition, namely House, Senate, Daily Digest, and Extensions of Remarks. `pages`, `start_page`, `end_page` identifies associated page numbers for each unit in the edition and `text` contains the associated text. For further details, please have look at the Data Output section. As the daily records are issued only when the congress is in session, a merging command introduce NA’s for dates when congress in not in session (e.g. weekends).
+
+#### Visualization Process
+After creating the dataset "my_data", the file `4_data_visualization.R` need to be sourced as it contains several plotting functions. Our script proposes the following ideas to visualize the text, e.g.
+
+* plotting the number of characters over time by unit
+* plotting the top 10 most frequent words of a certain unit in a certain period
+* creating wordclouds of a certain unit in a certain period
+* plotting the frequency of selected keywords over time of a certain unit
+* plotting the use of negative and positive words over time by unit
 
 ## Data Output
  <table style="width:100%">
@@ -65,11 +78,5 @@ Here, you need to set up first the working environment by installing required pa
   </tr>
 </table> 
 
-## Data Visualization
-The file `4_data_visualization.R` from the code-directory contains certain attemps to visualize the text, e.g. 
-* by plotting the top 10 most frequent words of a certain unit in a certain period
-* by creating wordclouds of a certain unit in a certain period
-* by plotting the frequency of selected keywords over time of a certain unit 
-
 ## Contributing
-Based on the data output we want to encourage the community to build analysis on congressional debates, to visualize their findings and to share them with us. Pull request are welcomed. Please read CONTRIBUTING.md for details on our code of conduct.
+Based on the data output we want to encourage the community to build analysis on congressional debates, to visualize their findings and to share them with us. Pull request are therefore highly welcomed. Please read CONTRIBUTING.md for details on our code of conduct.
