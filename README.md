@@ -5,7 +5,6 @@ crec_scrape is a respository that provides code to collect and tidy the daily ed
 The respository is the result of a group project within the [SPOSM](https://github.com/joachim-gassen/sposm) course of the Humboldt-University of Berlin and follows the following structure:
 
 * `code:` contain code to scrape, tidy and visualize the data
-* `output:` store scraped html-files
 * `raw_data:` store processed datasets
 * `plots:` contain different plots that have been produced to visualize data
 
@@ -59,7 +58,7 @@ After creating the dataset `my_data`, the file `3_data_visualization.R` need to 
   <tr>
     <td>pages</td>
     <td>Factor</td>
-    <td>Pages are numbered sequentially throughout the session of congress. The pageprefix operator helps to specify units by H, S, D and E</td>
+    <td>Pages are numbered sequentially throughout the session of Congress. The pageprefix operator helps to specify units by H, S, D and E</td>
   </tr>
   <tr>
     <td>start_page</td>
