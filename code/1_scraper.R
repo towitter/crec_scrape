@@ -1,12 +1,18 @@
 # SPOSM - scraper
 # simone euler, tobias witter
 
+## STEP 1: working enviornment setup --------------------------
+lib <- c("tidyverse", "lubridate", "data.table") 
+lapply(lib, require, character.only = T)
+
 '%ni%' <- Negate('%in%')
 
-# dates we want to download the records for
+## STEP 2: enter dates you want to download the records for ---
 #start_date <- ymd("2013-01-26")
 #end_date <- ymd("2013-01-31")
 
+
+## STEP 3: scrape congressional records -----------------------
 # base url for zipped files
 base_url <- "https://www.govinfo.gov/content/pkg/CREC-"
 end_url <- paste0(seq(start_date, end_date, 1), ".zip")
@@ -14,10 +20,8 @@ end_url <- paste0(seq(start_date, end_date, 1), ".zip")
 # scrape zip file url
 zip_url <- paste0(base_url, end_url)
 
-# function zip by link and unzip only html files,
-# store them as output
+# function zip by link and unzip only html files,store them as output
 download_unzip_extract_html <- function(x){
-  
   # temporary store
   temp <- tempfile()
   
@@ -27,9 +31,7 @@ download_unzip_extract_html <- function(x){
   # unzip and read html files
   html_to_unzip <- grep('\\.htm$', unzip(temp, list=TRUE)$Name,
                     ignore.case=TRUE, value=TRUE)
-  
   unzip(temp, files = html_to_unzip, exdir = "output")
-
   # function does not return values
 }
 

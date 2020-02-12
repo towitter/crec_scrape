@@ -2,8 +2,8 @@
 # simone euler, tobias witter
 
 ## STEP 1: working enviornment setup --------------------------
-lib <- c("rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", "lubridate") 
-lapply(lib, require, character.only = T) 
+#lib <- c("rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", "lubridate") 
+#lapply(lib, require, character.only = T) 
 
 ## STEP 2: create dataframe -----------------------------------
 
@@ -161,7 +161,7 @@ clean_text <- function(string){
   string <- str_to_lower(string, locale = "en")
   # remove multiple white spaces
   string <- str_replace_all(string,pattern = "[\\s]+", " ")
-  # remove stopwords from package and from hand-collected list
+  # remove stopwords from tm package and from hand-collected list
   string <- removeWords(string, stopwords("english"))
   string <- removeWords(string, congress_stopword)
   # remove single characters from text 
