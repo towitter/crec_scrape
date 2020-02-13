@@ -1,7 +1,7 @@
 # Contributing
 As we want to encourage participation, [pull requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/creating-a-pull-request) are highly welcomed. For major changes, please open an issue first to discuss what you would like to change. 
 
-Please note we have a code of conduct, please follow it in all your interactions with the project.
+Please note that we have a Code of Conduct, please follow it in all your interactions with the project.
 
 ## Code of Conduct
 ### Our Pledge

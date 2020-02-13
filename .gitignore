@@ -4,6 +4,11 @@
 # History files
 .Rhistory
 .Rapp.history
+# data files
+*.csv
+*.xls
+*.xlsx
+*.txt
 # Session Data files
 .RData
 # User-specific files

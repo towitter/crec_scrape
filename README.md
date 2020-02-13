@@ -1,15 +1,20 @@
 # crec_scrape
-crec_scrape is a respository that provides code to collect and tidy the daily editions of the U.S. Congressional Records from https://www.govinfo.gov/. Daily editions include text spoken on the floor of the Congress divided into four units: House of Representative, Senate, Daily Digest, and Extension of Remarks. By making the text accessible for R users, the purpose of this respository is to contribute to the understandability of congressional debates. 
+crec_scrape is a respository that provides code to collect and tidy the daily editions of the U.S. Congressional Records from https://www.govinfo.gov/. Daily editions include text spoken on the floor of the Congress divided into four units: House of Representative, Senate, Daily Digest, and Extension of Remarks. By making our code available to R users, we hope to contribute to the accessibility of congressional debates and to the open science community. 
 
 ## About the respository
 The respository is the result of a group project within the [SPOSM](https://github.com/joachim-gassen/sposm) course of the Humboldt-University of Berlin and follows the following structure:
 
 * `code:` contain code to scrape, tidy and visualize the data
-* `raw_data:` store processed datasets
-* `plots:` contain different plots that have been produced to visualize data
+* `output:` store processed datasets
+* `plots:` contains different plots that have been produced to visualize data for a presentation
 
 ## Basic Usage
 This project is tested using R 3.6.2. and RStudio version 1.2.1335.
+
+sessionInfo()
+R version 3.6.0 (2019-04-26)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 18362)
 
 The general form to start the **scraping**, **tidying**, and **visualization** process of U.S. Congressional Records is to [clone the respository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) and to open the file `master-sourcing-the-rest.R` from the code-directory. Here, you need to set up in a first step the working environment by installing required packages. 
 
