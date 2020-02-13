@@ -5,7 +5,6 @@ crec_scrape is a respository that provides code to collect and tidy the daily ed
 The respository is the result of a group project within the [SPOSM](https://github.com/joachim-gassen/sposm) course of the Humboldt-University of Berlin and follows the following structure:
 
 * `code:` contain code to scrape, tidy and visualize the data
-* `output:` store scraped html-files
 * `raw_data:` store processed datasets
 * `plots:` contain different plots that have been produced to visualize data
 
@@ -18,10 +17,10 @@ The general form to start the **scraping**, **tidying**, and **visualization** p
 In order to start the scraping process, the second step of the script requires you to enter the `start_date` and `end_date` of the time period you want to download the Congressional Records for. Then, by sourcing `1_scraper.R` the actual scraping process will be started. Thereby, the desired Congressional Records are downloaded as html-files and are stored in the directory output locally on your computer. 
 
 #### Tidying Process
-From there, the tidying process can start. By sourcing `2_clean_html_files.R` the script parses the text from each html-file and produces a dataset called `my_data`. The dataset `my_data` is structured as follows: `vol`, `no`, and `date` identify the daily edition of the Congressional Records. `unit` identifies the four main sections of each edition, namely House, Senate, Daily Digest, and Extensions of Remarks. `pages`, `start_page`, `end_page` identifies associated page numbers for each unit in the edition and `text` contains the associated text. For further details, please have look at the Data Output section. As the daily records are issued only when the congress is in session, a merging command introduce NA’s for dates when congress in not in session (e.g. weekends).
+From there, the tidying process can start. By sourcing `2_clean_html_files.R`, the script parses the text from each html-file and produces a dataset called `my_data`. The dataset `my_data` is structured as follows: `vol`, `no`, and `date` identify the daily edition of the Congressional Records. `unit` identifies the four main sections of each edition, namely House, Senate, Daily Digest, and Extensions of Remarks. `pages`, `start_page`, `end_page` identify associated page numbers for each unit in the edition and `text` contains the associated text. For further details, please have a look at the data output section. As the daily records are issued only when the congress is in session, a merging command introduce NA’s for dates when congress is not in session (e.g. weekends).
 
 #### Visualization Process
-After creating the dataset "my_data", the file `4_data_visualization.R` need to be sourced as it contains several plotting functions. Our script proposes the following ideas to visualize the text, e.g.
+After creating the dataset `my_data`, the file `3_data_visualization.R` need to be sourced as it contains several plotting functions. Our script proposes the following ideas to visualize the text, e.g.
 
 * plotting the number of characters over time by unit
 * plotting the top 10 most frequent words of a certain unit in a certain period
@@ -59,7 +58,7 @@ After creating the dataset "my_data", the file `4_data_visualization.R` need to 
   <tr>
     <td>pages</td>
     <td>Factor</td>
-    <td>Pages are numbered sequentially throughout the session of congress. The pageprefix operator helps to specify units by H, S, D and E</td>
+    <td>Pages are numbered sequentially throughout the session of Congress. The pageprefix operator helps to specify units by H, S, D and E</td>
   </tr>
   <tr>
     <td>start_page</td>
