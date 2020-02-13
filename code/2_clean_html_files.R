@@ -1,11 +1,8 @@
 # SPOSM - clean html files
 # simone euler, tobias witter
 
-## STEP 1: working enviornment setup --------------------------
-#lib <- c("rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", "lubridate") 
-#lapply(lib, require, character.only = T) 
 
-## STEP 2: create dataframe -----------------------------------
+## STEP 1: create dataframe -----------------------------------
 
 # create vector that contains different directories of scraping output
 directories <- paste0("output/", dir("output"),"/html")
@@ -47,7 +44,8 @@ my_data <- ddply(my_data, .(vol_no_date, unit), summarize,
                     text = paste(text, collapse = " "))
 
 
-## STEP 3: cleaning dataframe ------------------------------
+## STEP 2: cleaning dataframe ------------------------------
+
 ## helperfunctions
 # date: extract date in format YYYY-MM-DD
 clean_date <- function(vol_no_date){
