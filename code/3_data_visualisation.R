@@ -3,7 +3,10 @@
 
 ## STEP 1: working enviornment setup --------------------------
 
-# TRR266 colors
+
+# TRR266 colors 
+# credit: https://github.com/joachim-gassen/sposm
+
 lighten <- function(color, factor = 0.5) {
   if ((factor > 1) | (factor < 0)) stop("factor needs to be within [0,1]")
   col <- col2rgb(color)
@@ -20,8 +23,9 @@ trr266_red <- rgb(148, 70, 100, 255, maxColorValue = 255)
 
 trr_palette <- c(trr266_red, trr266_blue, trr266_yellow, trr266_petrol, trr266_lightpetrol)
 
-# transform dataframe to words
-words <- as_tibble(my_data) %>%
+# NOTICE: all the following function can only be applied when the dataframe is transfered
+# into a tibble called "words" that is tokenized by "word" 
+# (see Step 5 of "master_sourcing_the_rest.R" for further details)words <- as_tibble(my_data) %>%
   unnest_tokens(output = "word",
                 token = "words", 
                 input = text) %>%
@@ -111,6 +115,7 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
             plot.subtitle = element_text(size = 10, color = trr266_lightpetrol),
             plot.margin = margin(1, 1, 1, 1, "cm"))
   )
+
 }
 
 
