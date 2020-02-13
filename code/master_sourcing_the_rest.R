@@ -49,8 +49,10 @@ my_data <- my_data %>%
 
 # ANALYSIS OF THE EXTENT OF CONGRESSIONAL RECORDS
 # visualize the variation of number of characters over time by unit
-my_data %>% 
-  mutate(nchar = ifelse(is.na(text), 0, nchar(text))) %>%
+my_data %<>% 
+  mutate(nchar = ifelse(is.na(text), 0, nchar(text))) 
+
+my_data %>%
   ggplot(aes(date, nchar, group=unit, color=unit)) +
   geom_line() +
   scale_color_manual(values = trr_palette, name = "Congress unit")+
