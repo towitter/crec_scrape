@@ -64,8 +64,8 @@ words <- as_tibble(my_data) %>%
 
 # visualize top 10 most frequent words per unit
 get_top_10_words(startdate = "2012-07-01", 
-                 enddate =  "2012-12-30", 
-                 congressunit = "Senate")
+                 enddate =  "2013-06-30", 
+                 congressunit = "Extensions of Remarks")
 
 # visualize top 10 most frequent words for all units
 # not happy with results: words are not orderd by n
@@ -86,14 +86,14 @@ words %>%
 
 # visualize a wordcloud per unit
 get_wordcloud(startdate = "2012-07-01", 
-              enddate =  "2013-10-01", 
+              enddate =  "2013-06-30", 
               congressunit = "House")
 
 # visualize the usage of certain keywords per unit over time
 keyword_over_time(startdate = "2012-07-01", 
                   enddate = "2013-06-30",
-                  congressunit = "Senate",
-                  keywords = c("reform", "protection"))
+                  congressunit = "House",
+                  keywords = c("gun", "violence"))
 
 
 # SENTIMENT ANALYSIS
@@ -120,11 +120,13 @@ words %>%
   # join words with sentiments dictionary
   inner_join(get_sentiments("nrc")) %>%
   # filter only a specific sentiment
-  filter(sentiment %in% c("sadness", "joy")) %>%
+  filter(sentiment %in% c("sadness", "joy", "fear", "anger", "trust")) %>%
   dplyr::count(date, word, sentiment, sort =TRUE) %>%
   group_by(date, sentiment) %>% 
   dplyr::summarise(n = sum(n))%>%
   ggplot(aes(date, n, color = sentiment))+
+  #scale_color_manual(values = trr_palette, name = "Sentiments")+
+  theme_classic()+
   geom_line()
 
 ### END OF CODE ###
