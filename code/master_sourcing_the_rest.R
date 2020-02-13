@@ -3,7 +3,8 @@
 
 
 lib <- c("tidyverse", "rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", 
-         "lubridate", "data.table", "readr", "wordcloud", "tidytext") 
+         "lubridate", "data.table", "readr", "wordcloud", "tidytext", 
+         "textdata") 
 lapply(lib, require, character.only = T) 
 
 
@@ -37,6 +38,15 @@ my_data <- merge(dta, my_data, by = c("date", "unit"), all.x = T)
 
 source("code/3_data_visualisation.R")
 
+# function count words
+my_data <- my_data %>% mutate(
+  nchar = nchar(text),
+  page_length = abs(end_page - start_page))
+
+my_data <- my_data %>%
+  mutate(nchar = ifelse(is.na(nchar), 0, nchar),
+         page_length = ifelse(is.na(page_length), 0, page_length))
+
 # ANALYSIS OF THE EXTENT OF CONGRESSIONAL RECORDS
 # visualize the variation of number of characters over time by unit
 my_data %>% 
@@ -60,16 +70,25 @@ my_data %>%
 
 # ANALYSIS OF WORDS IN CONGRESSIONAL RECORDS
 # transform "my_data" to "words" by tokenizing words
-words <- as_tibble(my_data) %>%
+words <- as_tibble(my_data) %>% 
   unnest_tokens(output = "word",
                 token = "words", 
                 input = text) %>%
   dplyr::count(date, unit, word, sort = TRUE)
 
+
 # visualize top 10 most frequent words per unit
-get_top_10_words(startdate = "2012-07-01", 
-                 enddate =  "2013-06-30", 
-                 congressunit = "Extensions of Remarks")
+#senate
+get_top_10_words(startdate = "2012-07-01", enddate =  "2012-12-30", congressunit = "Senate")
+
+# house
+get_top_10_words("2013-01-28", "2013-01-31", "House")
+
+# daily digest
+get_top_10_words("2012-07-01", "2013-01-31", "Daily Digest")
+
+# extension of remarks
+get_top_10_words("2012-07-01", "2013-01-31", "Extensions of Remarks")
 
 # visualize top 10 most frequent words for all units
 # not happy with results: words are not orderd by n
@@ -96,100 +115,6 @@ get_wordcloud(startdate = "2012-07-01",
 # visualize the usage of certain keywords per unit over time
 keyword_over_time(startdate = "2012-07-01", 
                   enddate = "2013-06-30",
-                  congressunit = "House",
-                  keywords = c("gun", "violence"))
-
-
-# SENTIMENT ANALYSIS
-# visualize the usage of negative and postive words over time for all units
-words %>%
-  # aggregate dates to monthly values
-  #mutate(date = floor_date(words$date, "month")) %>%
-  # join words with sentiments dictionary
-  inner_join(get_sentiments("bing"))%>%
-  dplyr::count(unit, date, sentiment)%>%
-  spread(sentiment, n, fill = 0) %>%
-  mutate(sentiment = positive - negative)%>%
-  #plotting
-  ggplot(aes(date, sentiment, fill = unit))+
-  geom_col(show.legend = FALSE)+
-  scale_fill_manual(values = trr_palette)+
-  facet_wrap(~unit, ncol = 2, scales = "free_x")
-
-# frequency of sadness words in congressional records
-#install.packages("textdata")
-words %>%
-  # aggregate dates to monthly values
-  mutate(date = floor_date(date, "month")) %>%
-  # join words with sentiments dictionary
-  inner_join(get_sentiments("nrc")) %>%
-  # filter only a specific sentiment
-  filter(sentiment %in% c("sadness", "joy", "fear", "anger", "trust")) %>%
-  dplyr::count(date, word, sentiment, sort =TRUE) %>%
-  group_by(date, sentiment) %>% 
-  dplyr::summarise(n = sum(n))%>%
-  ggplot(aes(date, n, color = sentiment))+
-  #scale_color_manual(values = trr_palette, name = "Sentiments")+
-  theme_classic()+
-  geom_line()# function count e.g. states
-
-# function count words
-my_data <- my_data %>% mutate(
-  nchar = nchar(text),
-  page_length = abs(end_page - start_page))
-
-my_data <- my_data %>%
-  mutate(nchar = ifelse(is.na(nchar), 0, nchar),
-         page_length = ifelse(is.na(page_length), 0, page_length))
-
-# visualizations
-png("plots/plot1.png", width = 1200, height = 700)
-my_data %>%
-  ggplot(aes(date, nchar, group=unit, color=unit)) +
-  geom_line() +
-  ggtitle("Number of characters over time",
-          subtitle = paste0("N = ", sum(!is.na(my_data$text)), " days with a debate in Congress")) +
-  xlab("Number of characters") + ylab("date (daily data)")
-dev.off()
-
-png("plots/plot2.png", width = 1200, height = 700)
-my_data %>%
-  filter(unit %in% c("House", "Senate")) %>%
-  ggplot(aes(date, page_length)) +
-  geom_line() + #ylim(-20,500) +
-  facet_grid(unit ~ .) +
-  ggtitle("Number of pages over time",
-          subtitle = paste0("N = ", sum(!is.na(my_data$text)), " out of ", length(my_data$text), " days with a debate in Congress")) +
-  xlab("date (daily data)") + ylab("Number of characters")
-dev.off()
-
-# get vis functions
-system.time(
-  source("code/3_data_visualisation.R")
-)
-
-# apply function
-
-#senate
-get_top_10_words(startdate = "2012-07-01", enddate =  "2012-12-30", congressunit = "Senate")
-
-# house
-get_top_10_words("2013-01-28", "2013-01-31", "House")
-
-# daily digest
-get_top_10_words("2012-07-01", "2013-01-31", "Daily Digest")
-
-# extension of remarks
-get_top_10_words("2012-07-01", "2013-01-31", "Extensions of Remarks")
-
-#apply function
-get_wordcloud(startdate = "2012-08-29", enddate =  "2013-04-30", congressunit = "Senate")
-get_wordcloud(startdate = "2013-01-28", enddate =  "2013-01-29", congressunit = "House")
-
-
-#apply function
-keyword_over_time(startdate = "2012-07-01", 
-                  enddate = "2013-06-30",
                   congressunit = "Senate",
                   keywords = c("gun", "violence", "war"))
 
@@ -212,6 +137,62 @@ keyword_over_time(startdate = "2012-07-01",
                   congressunit = "Senate",
                   keywords = c("peace", "war"))
 dev.off()
+
+# SENTIMENT ANALYSIS
+# visualize the usage of negative and postive words over time for all units
+words %>%
+  # aggregate dates to monthly values
+  #mutate(date = floor_date(words$date, "month")) %>%
+  # join words with sentiments dictionary
+  inner_join(get_sentiments("bing"))%>%
+  dplyr::count(unit, date, sentiment)%>%
+  spread(sentiment, n, fill = 0) %>%
+  mutate(sentiment = positive - negative)%>%
+  #plotting
+  ggplot(aes(date, sentiment, fill = unit))+
+  geom_col(show.legend = FALSE)+
+  scale_fill_manual(values = trr_palette)+
+  facet_wrap(~unit, ncol = 2, scales = "free_x")
+
+# frequency of sadness words in congressional records
+words %>%
+  # aggregate dates to monthly values
+  mutate(date = floor_date(date, "month")) %>%
+  # join words with sentiments dictionary
+  inner_join(get_sentiments("nrc")) %>%
+  # filter only a specific sentiment
+  filter(sentiment %in% c("sadness", "joy", "fear", "anger", "trust")) %>%
+  dplyr::count(date, word, sentiment, sort =TRUE) %>%
+  group_by(date, sentiment) %>% 
+  dplyr::summarise(n = sum(n))%>%
+  ggplot(aes(date, n, color = sentiment))+
+  #scale_color_manual(values = trr_palette, name = "Sentiments")+
+  theme_classic()+
+  geom_line()# function count e.g. states
+
+
+
+# visualizations
+png("plots/plot1.png", width = 1200, height = 700)
+my_data %>%
+  ggplot(aes(date, nchar, group=unit, color=unit)) +
+  geom_line() +
+  ggtitle("Number of characters over time",
+          subtitle = paste0("N = ", sum(!is.na(my_data$text)), " days with a debate in Congress")) +
+  xlab("Number of characters") + ylab("date (daily data)")
+dev.off()
+
+png("plots/plot2.png", width = 1200, height = 700)
+my_data %>%
+  filter(unit %in% c("House", "Senate")) %>%
+  ggplot(aes(date, page_length)) +
+  geom_line() + #ylim(-20,500) +
+  facet_grid(unit ~ .) +
+  ggtitle("Number of pages over time",
+          subtitle = paste0("N = ", sum(!is.na(my_data$text)), " out of ", length(my_data$text), " days with a debate in Congress")) +
+  xlab("date (daily data)") + ylab("Number of characters")
+dev.off()
+
 
 
 

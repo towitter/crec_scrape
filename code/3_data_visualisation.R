@@ -26,10 +26,6 @@ trr_palette <- c(trr266_red, trr266_blue, trr266_yellow, trr266_petrol, trr266_l
 # NOTICE: all the following function can only be applied when the dataframe is transfered
 # into a tibble called "words" that is tokenized by "word" 
 # (see Step 5 of "master_sourcing_the_rest.R" for further details)words <- as_tibble(my_data) %>%
-  unnest_tokens(output = "word",
-                token = "words", 
-                input = text) %>%
-  dplyr::count(date, unit, word, sort = TRUE)
 
 
 ## STEP 2: analysis ------------------------------------------
