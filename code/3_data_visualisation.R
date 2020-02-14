@@ -87,9 +87,12 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
   
   dta <- expand.grid(seq(ymd(startdate), ymd(enddate), 1), c(congressunit), c(keywords))
   names(dta) <- c("date", "unit", "word")
+  dta <- dta %>%
+    mutate(date = floor_date(dta$date, "month"))
   
   over_time <- words %>%
     filter(date >= startdate & date <= enddate , unit == congressunit,  word %in% c(keywords)) %>%
+    mutate(date = floor_date(date, "month")) %>%
     group_by(date, unit, word) %>% 
     dplyr::summarise(word_count = sum(n, na.rm = T)) %>% 
     arrange(desc(date)) %>%
@@ -105,14 +108,14 @@ keyword_over_time <- function(startdate, enddate, congressunit, keywords){
       theme_classic()+
       labs(title = as.character(congressunit),
            subtitle = "Development of Keywords Over Time",
-           x = "Date", 
+           x = "Month", 
            y = "Frequency")+
+      scale_x_date(breaks = "1 year")+
       theme(plot.title = element_text(size = 14, face = "bold", color = trr266_petrol, vjust = -1),
             plot.subtitle = element_text(size = 10, color = trr266_lightpetrol),
             plot.margin = margin(1, 1, 1, 1, "cm"))
   )
-
+  
 }
-
 
 ### END OF CODE ###
