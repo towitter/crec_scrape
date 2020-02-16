@@ -9,12 +9,7 @@ The respository is the result of a group project within the [SPOSM](https://gith
 * `plots:` contains different plots that have been produced to visualize data for a presentation
 
 ## Basic Usage
-This project is tested using R 3.6.2. and RStudio version 1.2.1335.
-
-sessionInfo()
-R version 3.6.0 (2019-04-26)
-Platform: x86_64-w64-mingw32/x64 (64-bit)
-Running under: Windows 10 x64 (build 18362)
+This project is tested using R version 3.6.0 (2019-04-26), Platform: x86_64-w64-mingw32/x64 (64-bit), Running under: Windows 10 x64 (build 18362)
 
 The general form to start the **scraping**, **tidying**, and **visualization** process of U.S. Congressional Records is to [clone the respository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) and to open the file `master-sourcing-the-rest.R` from the code-directory. Here, you need to set up in a first step the working environment by installing required packages. 
 
