@@ -1,12 +1,6 @@
 # SPOSM - scraper
 # simone euler, tobias witter
 
-# base url for zipped files
-base_url <- "https://www.govinfo.gov/content/pkg/CREC-"
-end_url <- paste0(seq(start_date, end_date, 1), ".zip")
-
-# scrape zip file url
-zip_url <- paste0(base_url, end_url)
 
 # function zip by link and unzip only html files,store them as output
 download_unzip_extract_html <- function(x){
