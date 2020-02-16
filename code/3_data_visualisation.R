@@ -1,9 +1,6 @@
 ##SPOSM
 # simone euler, tobias witter
 
-## STEP 1: working enviornment setup --------------------------
-
-
 # TRR266 colors 
 # credit: https://github.com/joachim-gassen/sposm
 

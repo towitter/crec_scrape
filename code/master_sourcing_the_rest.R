@@ -2,8 +2,9 @@
 # simone euler, tobias witter
 
 
+## STEP 1: working enviornment setup --------------------------
 lib <- c("tidyverse", "rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", 
-         "lubridate", "data.table", "readr", "wordcloud", "tidytext", 
+         "lubridate", "RCurl", "data.table", "readr", "wordcloud", "tidytext", 
          "textdata") 
 lapply(lib, require, character.only = T) 
 
@@ -12,6 +13,20 @@ lapply(lib, require, character.only = T)
 
 start_date <- ymd("2012-12-20")
 end_date <- ymd("2013-01-10")
+date_sequence <- seq(start_date, end_date, 1)
+
+
+# base url for zipped files
+base_url <- "https://www.govinfo.gov/content/pkg/CREC-"
+end_url <- paste0(date_sequence, ".zip")
+
+# zip file url for scraping
+zip_url <- paste0(base_url, end_url)
+
+
+# not every day has a Congress session, therefore check if URL exists
+does_url_exist <- data.frame(cbind(date_sequence,
+                                   "exists" = url.exists(zip_url)))
 
 
 ## STEP 3: download the records as html-files and save them in "output" -----
