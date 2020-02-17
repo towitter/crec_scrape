@@ -2,7 +2,7 @@
 # simone euler, tobias witter
 
 
-## STEP 1: working enviornment setup --------------------------
+## STEP 1: working enviornment setup ----------------------------------------
 lib <- c("tidyverse", "rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", 
          "lubridate", "RCurl", "data.table", "readr", "wordcloud", "tidytext", 
          "textdata")
