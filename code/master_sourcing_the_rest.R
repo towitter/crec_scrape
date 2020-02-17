@@ -5,7 +5,17 @@
 ## STEP 1: working enviornment setup --------------------------
 lib <- c("tidyverse", "rvest", "tidyr", "stringr", "tm", "plyr", "dplyr", 
          "lubridate", "RCurl", "data.table", "readr", "wordcloud", "tidytext", 
-         "textdata") 
+         "textdata")
+
+lapply(lib, 
+       function(x)
+       {
+         if(!(x %in% installed.packages()) | x %in% old.packages())
+         {
+           install.packages(x)
+         }
+       })
+
 lapply(lib, require, character.only = T) 
 
 
