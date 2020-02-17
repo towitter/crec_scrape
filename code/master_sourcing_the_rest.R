@@ -9,20 +9,14 @@ lib <- c("tidyverse", "rvest", "tidyr", "stringr", "tm", "plyr", "dplyr",
 
 lapply(lib, 
        function(x)
-       {
-         if(!(x %in% installed.packages()) | x %in% old.packages())
-         {
-           install.packages(x)
-         }
-       })
-
+       {if(x %in% rownames(installed.packages()) == FALSE) {install.packages(x)}})
 lapply(lib, require, character.only = T) 
 
 
 ## STEP 2: enter dates you want to download the records for -----------------
 
-start_date <- ymd("2012-12-20")
-end_date <- ymd("2013-01-10")
+start_date <- ymd("2012-12-30")
+end_date <- ymd("2013-01-05")
 date_sequence <- seq(start_date, end_date, 1)
 
 

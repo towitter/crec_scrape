@@ -4,8 +4,11 @@
 
 ## STEP 1: create dataframe -----------------------------------
 
+dates_from_scraped_html <- ymd(str_remove_all(dir("output"), pattern = "CREC-"))
+parse_html <- dates_from_scraped_html %in% date_sequence
+
 # create vector that contains different directories of scraping output
-directories <- paste0("output/", dir("output"),"/html")
+directories <- paste0("output/", dir("output"),"/html")[parse_html]
 
 # create dataframe for html files
 my_data <- list()
