@@ -68,11 +68,11 @@ my_data <- my_data %>%
 
 # ANALYSIS OF THE EXTENT OF CONGRESSIONAL RECORDS
 # visualize the variation of number of characters over time by unit
-my_data %<>% 
+my_data <- my_data %>% 
   mutate(nchar = ifelse(is.na(text), 0, nchar(text))) 
 
 # visualizations
-png("plots/plot1.png", width = 1200, height = 700)
+#png("plots/plot1.png", width = 1200, height = 700)
 my_data %>%
   ggplot(aes(date, nchar, group=unit, color=unit)) +
   geom_line() +
@@ -80,9 +80,9 @@ my_data %>%
   ggtitle("Number of characters over time",
           subtitle = paste0("N = ", sum(!is.na(my_data$text)), " days with a debate in Congress")) +
   xlab("Number of characters") + ylab("date (daily data)")
-dev.off()
+#dev.off()
 
-png("plots/plot2.png", width = 1200, height = 700)
+#png("plots/plot2.png", width = 1200, height = 700)
 my_data %>%
   filter(unit %in% c("House", "Senate")) %>%
   ggplot(aes(date, page_length)) +
@@ -92,12 +92,12 @@ my_data %>%
   ggtitle("Number of pages over time",
           subtitle = paste0("N = ", sum(!is.na(my_data$text)), " out of ", length(my_data$text), " days with a debate in Congress")) +
   xlab("date (daily data)") + ylab("Number of characters")
-dev.off()
+#dev.off()
 
 
 
 # visualize the share of number of characters per month by each unit
-png("plots/pres/share_characters_by_unit.png", width = 1200, height = 700)
+#png("plots/pres/share_characters_by_unit.png", width = 1200, height = 700)
 my_data %>% 
   filter(unit %in% c("House", "Senate")) %>%
   # aggregate dates to monthly values
@@ -118,7 +118,7 @@ my_data %>%
   theme(plot.title = element_text(size = 14, face = "bold", color = trr266_petrol, vjust = -1),
         plot.subtitle = element_text(size = 10, color = trr266_lightpetrol),
         plot.margin = margin(1, 1, 1, 1, "cm"),)
-dev.off()
+#dev.off()
 
 
 # ANALYSIS OF WORDS IN CONGRESSIONAL RECORDS
@@ -132,70 +132,70 @@ words <- as_tibble(my_data) %>%
 
 # visualize top 10 most frequent words per unit
 #senate
-png("plots/top10_senate.png", width = 1200, height = 700)
+#png("plots/top10_senate.png", width = 1200, height = 700)
 get_top_10_words(startdate = start_date, enddate =  end_date, congressunit = "Senate")
-dev.off()
+#dev.off()
 
 # house
-png("plots/top10_house.png", width = 1200, height = 700)
+#png("plots/top10_house.png", width = 1200, height = 700)
 get_top_10_words(start_date, end_date, "House")
-dev.off()
+#dev.off()
 
 
 # visualize a wordcloud per unit
-png("plots/wordcloud_house.png", width = 1200, height = 700)
+#png("plots/wordcloud_house.png", width = 1200, height = 700)
 get_wordcloud(startdate = "2012-07-01", 
               enddate =  "2013-06-30", 
               congressunit = "House")
-dev.off()
+#dev.off()
 
 # visualize the usage of certain keywords per unit over time
-png("keywords_gun_violence_war_senate.png", width = 1200, height = 700)
+#png("keywords_gun_violence_war_senate.png", width = 1200, height = 700)
 keyword_over_time(startdate = start_date, 
                   enddate = end_date,
                   congressunit = "Senate",
                   keywords = c("gun", "violence", "war"))
-dev.off()
+#dev.off()
 
-png("keywords_joy_peace_happy_senate.png", width = 1200, height = 700)
+#png("keywords_joy_peace_happy_senate.png", width = 1200, height = 700)
 keyword_over_time(startdate = start_date, 
                   enddate = end_date,
                   congressunit = "Senate",
                   keywords = c("joy", "peace", "happy"))
-dev.off()
+#dev.off()
 
 
-png("keywords_sequester_cliff_senate.png", width = 1200, height = 700)
+#png("keywords_sequester_cliff_senate.png", width = 1200, height = 700)
 keyword_over_time(startdate = start_date, 
                   enddate = end_date,
                   congressunit = "Senate",
                   keywords = c("sequester", "cliff"))
-dev.off()
+#dev.off()
 
-png("keywords_sequester_cliff_house.png", width = 1200, height = 700)
+#png("keywords_sequester_cliff_house.png", width = 1200, height = 700)
 keyword_over_time(startdate = start_date, 
                   enddate = end_date,
                   congressunit = "House",
                   keywords = c("sequester", "cliff"))
-dev.off()
+#dev.off()
 
-png("keywords_peace_war_senate.png", width = 1200, height = 700)
+#png("keywords_peace_war_senate.png", width = 1200, height = 700)
 keyword_over_time(startdate = start_date, 
                   enddate = end_date,
                   congressunit = "Senate",
                   keywords = c("peace", "war"))
-dev.off()
+#dev.off()
 
-png("keywords_peace_war_house.png", width = 1200, height = 700)
+#png("keywords_peace_war_house.png", width = 1200, height = 700)
 keyword_over_time(startdate = start_date, 
                   enddate = end_date,
                   congressunit = "House",
                   keywords = c("peace", "war"))
-dev.off()
+#dev.off()
 
 # SENTIMENT ANALYSIS
 # visualize the usage of negative and postive words over time for all units
-png("plots/pres/sentiment_per_unit.png", width = 1200, height = 700)
+#png("plots/pres/sentiment_per_unit.png", width = 1200, height = 700)
 words %>%
   # aggregate dates to monthly values
   mutate(date = floor_date(words$date, "month")) %>%
@@ -215,10 +215,10 @@ words %>%
   theme(plot.title = element_text(size = 14, face = "bold", color = trr266_petrol, vjust = -1),
         plot.subtitle = element_text(size = 10, color = trr266_lightpetrol),
         plot.margin = margin(1, 1, 1, 1, "cm"))
-dev.off()
+#dev.off()
 
 # frequency of sadness words in congressional records
-png("sentiment_per_cat.png", width = 1200, height = 700)
+#png("sentiment_per_cat.png", width = 1200, height = 700)
 words %>%
   # aggregate dates to monthly values
   mutate(date = floor_date(date, "month")) %>%
@@ -226,7 +226,7 @@ words %>%
   inner_join(get_sentiments("nrc")) %>%
   # filter only a specific sentiment
   filter(sentiment %in% c("sadness", "joy", "fear", "anger", "trust")) %>%
-  dplyr::count(date, word, sentiment, sort =TRUE) %>%
+  dplyr::count(date, word, sentiment, sort = TRUE) %>%
   group_by(date, sentiment) %>% 
   dplyr::summarise(n = sum(n))%>%
   ggplot(aes(date, n, color = sentiment))+
@@ -240,7 +240,7 @@ words %>%
   theme(plot.title = element_text(size = 14, face = "bold", color = trr266_petrol, vjust = -1),
         plot.subtitle = element_text(size = 10, color = trr266_lightpetrol),
         plot.margin = margin(1, 1, 1, 1, "cm"))
-dev.off()
+#dev.off()
 
 
 
