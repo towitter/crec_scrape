@@ -15,6 +15,7 @@ download_unzip_extract_html <- function(x){
                     ignore.case=TRUE, value=TRUE)
   unzip(temp, files = html_to_unzip, exdir = "output")
   # function does not return values
+  unlink(temp)
 }
 
 

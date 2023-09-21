@@ -4,14 +4,14 @@
 
 ## STEP 1: create dataframe -----------------------------------
 
-dates_from_scraped_html <- ymd(str_remove_all(dir("output"), pattern = "CREC-"))
+dates_from_scraped_html <- as.Date(str_remove_all(dir("output"), pattern = "CREC-"), origin="1970-01-01")
 parse_html <- dates_from_scraped_html %in% date_sequence
 
 # create vector that contains different directories of scraping output
 directories <- paste0("output/", dir("output"),"/html")[parse_html]
 
 # create dataframe for html files
-my_data <- list()
+data_frame_with_texts <- list()
 
 # function to provide body from html file in a dataframe with 6 columnes
 get_text_from_html <- function(html){
@@ -21,28 +21,28 @@ get_text_from_html <- function(html){
   sep <- as.data.frame(str_split(body, "\n", n = 6, simplify = TRUE))
 }
 
-# save all html files in my_data
+# save all html files in data_frame_with_texts
 for(i in seq_along(directories)){
   
   # get file names from working directory
   files <- paste0(directories[i], "/", list.files(directories[i], pattern = "*.htm"))
   
-  # apply get_text function and save output in my_data
-  my_data[[i]] <- lapply(files, get_text_from_html)
-  my_data[[i]] <- bind_rows(my_data[[i]])
+  # apply get_text function and save output in data_frame_with_texts
+  data_frame_with_texts[[i]] <- lapply(files, get_text_from_html)
+  data_frame_with_texts[[i]] <- bind_rows(data_frame_with_texts[[i]])
 }
 
 # bind elements of list to one frame
-my_data <- bind_rows(my_data)
+data_frame_with_texts <- bind_rows(data_frame_with_texts)
 
 # rename columnes
-my_data <- my_data %>%
+data_frame_with_texts <- data_frame_with_texts %>%
   select(-V1, vol_no_date = V2, unit = V3,
          pages = V4, link = V5, text = V6) %>%
   distinct(vol_no_date, unit, pages, text, .keep_all = TRUE)
 
-# summarize my_data along congress unit and date
-my_data <- ddply(my_data, .(vol_no_date, unit), summarize,
+# summarize data_frame_with_texts along congress unit and date
+data_frame_with_texts <- ddply(data_frame_with_texts, .(vol_no_date, unit), summarize,
                     pages = paste(unique(pages), collapse = "-"),
                     text = paste(text, collapse = " "))
 
@@ -181,21 +181,24 @@ clean_all <- function(vol_no_date, unit, pages, text){
   unit <- clean_unit(unit)
   pages <- clean_pages(pages)
   text <- clean_text(text)
-  clean_data <- data.frame(vol, no, date, unit, pages, text, stringsAsFactors = FALSE)
+  clean_data <- data.frame(vol, no, date, unit, pages, 
+                           text, stringsAsFactors = FALSE)
   return(clean_data)
 }
 
 # apply helperfunction to clean dataset
-my_data <- clean_all(my_data$vol_no_date, 
-                     my_data$unit, 
-                     my_data$pages, 
-                     my_data$text)
+data_frame_with_texts <- clean_all(data_frame_with_texts$vol_no_date, 
+                     data_frame_with_texts$unit, 
+                     data_frame_with_texts$pages, 
+                     data_frame_with_texts$text)
 
 
 # add start_page and end_page columns
-my_data <- my_data %>%
+data_frame_with_texts <- data_frame_with_texts %>%
   mutate(pg = gsub("[^0-9-]", "", pages)) %>%
   separate(., pg, into = c("start_page", "end_page"),
-           sep = "-", remove = T, convert = T, extra = "warn", fill = "warn")
+           sep = "-", remove = T, convert = T, 
+           extra = "warn", fill = "warn") %>%
+  select(-pages)
 
 ### END OF CODE ###
