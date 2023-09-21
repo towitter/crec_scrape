@@ -11,7 +11,7 @@ The respository is the result of a group project within the [SPOSM](https://gith
 ## Basic Usage
 This project is tested using R version 3.6.0 (2019-04-26), Platform: x86_64-w64-mingw32/x64 (64-bit), Running under: Windows 10 x64 (build 18362)
 
-The general form to start the **scraping**, **tidying**, and **visualization** process of U.S. Congressional Records is to [clone the respository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) and to open the file `master-sourcing-the-rest.R` from the code-directory. Here, you need to set up in a first step the working environment by installing required packages. 
+The general form to start the **scraping**, **tidying**, and **visualization** process of U.S. Congressional Records is to [clone the respository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) and to open the file `master.R` from the code-directory. Here, you need to set up in a first step the working environment by installing required packages. 
 
 #### Scraping Process
 In order to start the scraping process, the second step of the script requires you to enter the `start_date` and `end_date` of the time period you want to download the Congressional Records for. Then, by sourcing `1_scraper.R` the actual scraping process will be started. Thereby, the desired Congressional Records are downloaded as html-files and are stored in the directory output locally on your computer. 
