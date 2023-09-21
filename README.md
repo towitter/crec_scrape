@@ -4,7 +4,7 @@ crec_scrape is a respository that provides code to collect and tidy the daily ed
 ## About the respository
 The respository is the result of a group project within the [SPOSM](https://github.com/joachim-gassen/sposm) course of the Humboldt-University of Berlin and follows the following structure:
 
-* `code:` contain code to scrape, tidy and visualize the data
+* `code:` contains code to scrape, tidy and visualize the data
 * `output:` store processed datasets
 * `plots:` contains different plots that have been produced to visualize data for a presentation
 
